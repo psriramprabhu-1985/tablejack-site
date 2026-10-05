@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Thank you — TableJack Pro is active</title>
+<!--
+  ============================================================================
+  HOST THIS AT THE URL DODO PAYMENTS REDIRECTS TO AFTER CHECKOUT.
+
+  Fill in before it works:
+
+  1. EXTENSION_ID below — the long string in your Chrome Web Store listing URL.
+     You only get this after your first upload. It never changes afterwards.
+
+  2. manifest.json's `externally_connectable` must name the domain THIS page is
+     served from. If this page lives at
+     https://yourname.github.io/tablejack-site/thank-you.html
+     the manifest needs "https://yourname.github.io/*". They must match exactly
+     or the browser silently refuses the message — no error, it just doesn't work.
+
+  3. Your Dodo buy link needs the redirect, e.g.
+     https://checkout.dodopayments.com/buy/pdt_XXXX?quantity=1&redirect_url=<this page>
+     Dodo appends license_key, payment_id, status and email itself.
+  ============================================================================
+-->
+<style>
+  :root{--bg:#fbfaf8;--panel:#fff;--fg:#1a1d21;--muted:#5f6772;--line:#e4e2dd;
+        --accent:#2f6f4e;--accent-soft:#e9f2ed;--bad:#9b3232;--bad-soft:#fceceb}
+  @media (prefers-color-scheme:dark){
+    :root{--bg:#14161a;--panel:#1a1d22;--fg:#e9eaec;--muted:#9aa1ab;--line:#2a2e35;
+          --accent:#67bd8e;--accent-soft:#172a20;--bad:#e08585;--bad-soft:#2b1a1a}
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--fg);min-height:100vh;
+       display:flex;align-items:center;justify-content:center;padding:24px;
+       font:16px/1.6 ui-sans-serif,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;
+        padding:38px 34px;max-width:520px;width:100%;text-align:center}
+  .mark{width:56px;height:56px;border-radius:14px;background:var(--accent-soft);
+        display:flex;align-items:center;justify-content:center;margin:0 auto 20px}
+  .mark svg{width:28px;height:28px;stroke:var(--accent);fill:none;stroke-width:2.4;
+            stroke-linecap:round;stroke-linejoin:round}
+  h1{font-size:25px;letter-spacing:-.02em;margin:0 0 8px}
+  p{color:var(--muted);margin:0 0 16px}
+  .state{font-weight:600;padding:12px 16px;border-radius:9px;margin:20px 0 0;font-size:15px}
+  .state.working,.state.ok{background:var(--accent-soft);color:var(--accent)}
+  .state.bad{background:var(--bad-soft);color:var(--bad)}
+  .fallback{margin-top:22px;padding-top:20px;border-top:1px solid var(--line);text-align:left}
+  .fallback[hidden]{display:none}
+  .fallback h2{font-size:14px;margin:0 0 8px}
+  .fallback p{font-size:14px;margin:0 0 10px}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;
+       background:var(--accent-soft);padding:2px 6px;border-radius:4px;
+       word-break:break-all;display:inline-block;max-width:100%}
+  a.btn{display:inline-block;margin-top:8px;background:var(--accent);color:#fff;
+        text-decoration:none;font-weight:600;padding:9px 18px;border-radius:8px;font-size:15px}
+  @media (prefers-color-scheme:dark){a.btn{color:#10231a}}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="mark"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></div>
+  <h1>Thank you</h1>
+  <p>Your purchase is complete. Setting up TableJack Pro now — you don't need to do anything.</p>
+
+  <p class="state working" id="state">Activating&hellip;</p>
+
+  <div class="fallback" id="fallback" hidden>
+    <h2>Finish setup</h2>
+    <p id="fallbackText"></p>
+    <p><a class="btn" id="storeLink" href="#" target="_blank" rel="noopener">Install TableJack</a></p>
+    <p style="margin-top:14px">Then reload this page and it will activate automatically.</p>
+    <p style="margin-top:14px">Your licence key, if you ever need it:<br><code id="keyOut">—</code></p>
+  </div>
+</div>
+
+<script>
+  // ---- fill these in -----------------------------------------------------
+  var EXTENSION_ID = 'YOUR_EXTENSION_ID_HERE';
+  var STORE_URL = 'https://chromewebstore.google.com/detail/' + EXTENSION_ID;
+  // ------------------------------------------------------------------------
+
+  var stateEl = document.getElementById('state');
+  var fallbackEl = document.getElementById('fallback');
+  var fallbackText = document.getElementById('fallbackText');
+
+  function show(text, kind) {
+    stateEl.textContent = text;
+    stateEl.className = 'state ' + kind;
+  }
+
+  function showFallback(message) {
+    fallbackText.textContent = message;
+    fallbackEl.hidden = false;
+    document.getElementById('storeLink').href = STORE_URL;
+  }
+
+  // Dodo sends `license_key`; the others are accepted in case you ever switch.
+  var params = new URLSearchParams(location.search);
+  var key = params.get('license_key') || params.get('licence_key') ||
+            params.get('key') || params.get('k') || '';
+
+  // Quantity > 1 arrives comma-separated; the first key is this buyer's.
+  if (key.indexOf(',') !== -1) key = key.split(',')[0].trim();
+
+  document.getElementById('keyOut').textContent = key || 'not provided';
+
+  if (params.get('status') && params.get('status') !== 'succeeded') {
+    show('That payment did not complete.', 'bad');
+    showFallback('If you believe this is wrong, reply to your receipt email and we will sort it out.');
+  } else if (!key) {
+    show('No licence key in this link.', 'bad');
+    showFallback('Your purchase went through, but the key was not passed to this page. ' +
+      'Check your email for it, then paste it into the extension’s options page.');
+  } else if (!window.chrome || !chrome.runtime || !chrome.runtime.sendMessage) {
+    show('Install TableJack to activate.', 'bad');
+    showFallback('This browser cannot talk to the extension yet — most likely it is not installed, ' +
+      'or you are not in Chrome or Edge.');
+  } else {
+    chrome.runtime.sendMessage(EXTENSION_ID, { type: 'tablejack-activate', key: key }, function (response) {
+      // A missing extension surfaces here as lastError rather than an exception.
+      if (chrome.runtime.lastError || !response) {
+        show('Install TableJack to activate.', 'bad');
+        showFallback('We could not reach the extension. Install it, then reload this page — ' +
+          'it will activate on its own.');
+        return;
+      }
+      if (response.ok) {
+        show('Pro is active. You can close this page.', 'ok');
+      } else {
+        show(response.error || 'That key could not be activated.', 'bad');
+        showFallback('If this keeps happening, reply to your receipt email and we will sort it out.');
+      }
+    });
+  }
+</script>
+</body>
+</html>

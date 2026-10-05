@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TableJack — Privacy Policy</title>
+<!--
+  REPLACE BEFORE PUBLISHING:
+    [YOUR LEGAL NAME OR COMPANY]   [YOUR BUSINESS ADDRESS]   [CONTACT@EXAMPLE.COM]
+-->
+<style>
+  :root{--bg:#fbfaf8;--panel:#fff;--fg:#1a1d21;--muted:#5c6470;--line:#e4e2dd;
+        --accent:#2f6f4e;--accent-soft:#e9f2ed;--warn:#a05a1e;--warn-soft:#fdf3e7}
+  @media (prefers-color-scheme:dark){
+    :root{--bg:#14161a;--panel:#1a1d22;--fg:#e9eaec;--muted:#9aa1ab;--line:#2a2e35;
+          --accent:#67bd8e;--accent-soft:#172a20;--warn:#d99a54;--warn-soft:#2a2115}
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--fg);
+       font:16px/1.65 ui-sans-serif,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  .wrap{max-width:720px;margin:0 auto;padding:56px 24px 96px}
+  h1{font-size:30px;letter-spacing:-.02em;margin:0 0 6px}
+  .date{color:var(--muted);margin:0 0 30px;font-size:14px}
+  h2{font-size:18px;margin:36px 0 10px;letter-spacing:-.01em}
+  p{margin:0 0 14px}
+  ul{margin:0 0 14px;padding-left:22px}li{margin-bottom:6px}
+  a{color:var(--accent)}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.88em;
+       background:var(--accent-soft);padding:1px 5px;border-radius:4px}
+  .box{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--accent);
+       border-radius:8px;padding:18px 20px;margin:0 0 26px}
+  .box.warn{border-left-color:var(--warn);background:var(--warn-soft)}
+  .box p:last-child{margin-bottom:0}
+  table{width:100%;border-collapse:collapse;margin:0 0 20px;font-size:15px}
+  th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+  footer{margin-top:48px;padding-top:20px;border-top:1px solid var(--line);color:var(--muted);font-size:14px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>TableJack — Privacy Policy</h1>
+<p class="date">Last updated: 5 October 2026</p>
+
+<div class="box">
+  <p><strong>The short version: the tables you extract never leave your computer.</strong> TableJack reads,
+  converts and saves everything locally. It has no analytics, no telemetry and no account.</p>
+  <p><strong>One exception, and only if you buy Pro:</strong> activating your licence sends your licence key
+  to our payment provider once, to confirm it is genuine. That request contains your licence key and a device
+  label. It never contains page content, table data, URLs, or anything about what you were looking at.</p>
+</div>
+
+<h2>What TableJack does with page data</h2>
+<p>When you click the TableJack icon, it reads the tables on the page you are currently viewing so it can show
+them to you and convert them. That data stays in your browser's memory. If you export, the file is written
+directly to your own Downloads folder, or the text is placed on your own clipboard.</p>
+<p><strong>Page content is never transmitted anywhere, on any tier.</strong> There is no code in TableJack
+that sends page data to anyone. The source is unminified and you can verify this yourself.</p>
+
+<h2>The one network request: licence activation</h2>
+<p>If you buy Pro, TableJack contacts our payment provider, <strong>Dodo Payments</strong>, to confirm your
+licence key is real. This is the only time the extension uses the network.</p>
+
+<table>
+  <thead><tr><th>What is sent</th><th>To whom</th><th>When</th><th>Why</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>Your licence key, and a short device label such as <code>Chrome on Windows</code></td>
+      <td>Dodo Payments (<code>live.dodopayments.com</code>)</td>
+      <td>Once, when you activate. Occasionally afterwards to re-check the licence is still valid.</td>
+      <td>To confirm the key is genuine and has not exceeded its device limit</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>That is the complete contents of the request. Your IP address is visible to Dodo Payments as it is to any
+website you connect to. We do not send your email address, your name, the pages you visit, or anything you
+have extracted.</p>
+<p>If the request fails — you are offline, or the service is unreachable — TableJack keeps working. It does not
+lock you out because it could not reach the internet.</p>
+<p>Dodo Payments handles this data under their own privacy policy, as the merchant of record for your purchase.</p>
+
+<h2>The free tier makes no network requests at all</h2>
+<p>If you never buy Pro, TableJack never contacts anything. There is no activation to perform, so there is
+nothing to send.</p>
+
+<h2>What is stored, and where</h2>
+<table>
+  <thead><tr><th>What</th><th>Where</th><th>Why</th></tr></thead>
+  <tbody>
+    <tr><td>Your licence key and activation record, if you bought Pro</td>
+        <td>Chrome's extension storage on your device, synced across your signed-in browsers if you have Chrome Sync on</td>
+        <td>So Pro stays unlocked between sessions</td></tr>
+    <tr><td>Column preferences</td><td>Same</td><td>So your choices persist</td></tr>
+  </tbody>
+</table>
+<p>That is the complete list. Both live in storage that belongs to you and that we cannot read. Removing the
+extension removes them.</p>
+
+<h2>Permissions, and why each one exists</h2>
+<ul>
+  <li><strong>activeTab</strong> — read the tables on the page you are looking at, only when you click the
+    icon. No access to other tabs, and no access to your browsing history.</li>
+  <li><strong>scripting</strong> — run the table-reading code in that tab. When you explicitly press "Grab all
+    rows" or "Follow pages", this is also what scrolls the table or clicks the page's own next-page button.</li>
+  <li><strong>downloads</strong> — save the CSV or Excel file you asked for.</li>
+  <li><strong>storage</strong> — remember your licence and preferences locally.</li>
+  <li><strong>Access to <code>live.dodopayments.com</code></strong> — used only to activate a Pro licence.
+    This permission allows TableJack to contact that one address and nothing else. It gives no access to the
+    websites you visit.</li>
+</ul>
+<p>TableJack requests no permission to read any website. It cannot read a page until you click it.</p>
+
+<h2>Payments</h2>
+<p>If you buy Pro, payment is handled entirely by Dodo Payments, who act as the merchant of record. We never
+see or store your card details. Your email address is used only to deliver your licence key and receipt. We do
+not sell, rent or share it.</p>
+
+<h2>Children</h2>
+<p>TableJack is a general-purpose utility and is not directed at children. It collects no personal information
+from anyone, including children.</p>
+
+<h2>Your rights</h2>
+<p>Data-protection laws such as the GDPR, the UK GDPR, India's DPDP Act and the CCPA give you rights to access,
+correct and delete personal data held about you. We hold almost none — the exceptions are the email address
+attached to a purchase, and the activation record held by Dodo Payments. You can ask us to remove either at any
+time using the contact address below, and we will pass the request on where it sits with them.</p>
+<p>We do not sell personal information, and we do not use it for advertising or profiling.</p>
+
+<h2>Changes</h2>
+<p>If this policy changes, the updated version will be posted here with a new date. If a change ever involved
+collecting more than is described above, it would be announced in the extension itself before taking effect.</p>
+
+<h2>Contact</h2>
+<p>Questions about this policy, or a request about your data:
+<a href="mailto:[CONTACT@EXAMPLE.COM]">[CONTACT@EXAMPLE.COM]</a>.</p>
+<p>TableJack is operated by [YOUR LEGAL NAME OR COMPANY], [YOUR BUSINESS ADDRESS].</p>
+
+<footer>
+  TableJack copies web tables into Excel, CSV and the clipboard. Your table data stays on your own computer.<br>
+  <a href="terms.html">Licence Terms</a>
+</footer>
+
+</div>
+</body>
+</html>
