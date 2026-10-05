@@ -47,7 +47,9 @@
   .state.working,.state.ok{background:var(--accent-soft);color:var(--accent)}
   .state.bad{background:var(--bad-soft);color:var(--bad)}
   .fallback{margin-top:22px;padding-top:20px;border-top:1px solid var(--line);text-align:left}
-  .fallback[hidden]{display:none}
+  /* The hidden attribute must always win — same rule as popup.css. Any element
+     given display:flex/grid otherwise stays visible when JS sets .hidden=true. */
+  [hidden]{display:none !important}
   .fallback h2{font-size:14px;margin:0 0 8px}
   .fallback p{font-size:14px;margin:0 0 10px}
   code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;
@@ -61,8 +63,8 @@
 <body>
 <div class="card">
   <div class="mark"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></div>
-  <h1>Thank you</h1>
-  <p>Your purchase is complete. Setting up TableJack Pro now — you don't need to do anything.</p>
+  <h1 id="title">Thank you</h1>
+  <p id="lede">Your purchase is complete. Setting up TableJack Pro now — you don't need to do anything.</p>
 
   <p class="state working" id="state">Activating&hellip;</p>
 
@@ -71,7 +73,7 @@
     <p id="fallbackText"></p>
     <p><a class="btn" id="storeLink" href="#" target="_blank" rel="noopener">Install TableJack</a></p>
     <p style="margin-top:14px">Then reload this page and it will activate automatically.</p>
-    <p style="margin-top:14px">Your licence key, if you ever need it:<br><code id="keyOut">—</code></p>
+    <p id="keyLine" style="margin-top:14px">Your licence key, if you ever need it:<br><code id="keyOut">—</code></p>
   </div>
 </div>
 
@@ -106,7 +108,25 @@
 
   document.getElementById('keyOut').textContent = key || 'not provided';
 
-  if (params.get('status') && params.get('status') !== 'succeeded') {
+  // Someone can reach this page without having bought anything — a bookmark, a
+  // search result, a shared link. Dodo always appends at least one of these, so
+  // their total absence means "not arriving from a checkout" rather than "a
+  // purchase went wrong". Telling that person their payment failed would be
+  // alarming and false, so this case gets its own neutral copy.
+  var fromCheckout = params.has('license_key') || params.has('licence_key') ||
+                     params.has('key') || params.has('k') ||
+                     params.has('status') || params.has('payment_id');
+
+  if (!fromCheckout) {
+    document.getElementById('title').textContent = 'TableJack';
+    document.getElementById('lede').textContent =
+      'This page activates Pro automatically after a purchase. You have arrived ' +
+      'here without one, so there is nothing to activate.';
+    show('Nothing to activate on this visit.', 'ok');
+    showFallback('If you have already bought TableJack, open the link in your receipt ' +
+      'email rather than this page on its own — the licence key travels in that link.');
+    document.getElementById('keyLine').hidden = true;
+  } else if (params.get('status') && params.get('status') !== 'succeeded') {
     show('That payment did not complete.', 'bad');
     showFallback('If you believe this is wrong, reply to your receipt email and we will sort it out.');
   } else if (!key) {
